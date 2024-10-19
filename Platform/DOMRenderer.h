@@ -359,7 +359,7 @@ public:
         [h_button_content setTransparent:NO];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        [style setAlignment:NSCenterTextAlignment];
+        [style setAlignment:NSTextAlignmentCenter];
         
         NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSColor blackColor], NSForegroundColorAttributeName, style, NSParagraphStyleAttributeName, nil];
         
