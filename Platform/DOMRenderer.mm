@@ -1,5 +1,7 @@
 #import "DOMRenderer.h"
 
+using namespace ZKA;
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // Create a default window
@@ -8,8 +10,9 @@ int main(int argc, const char * argv[]) {
         [window setBackgroundColor:[NSColor whiteColor]];
         
         [window makeKeyAndOrderFront:nil];
-        [window setTitle:@"Photon"];
-        [window setSubtitle:@"photon:blank"];
+        
+        [window setTitle:@"Photon Browser"];
+        [window setSubtitle:@"photon:welcome"];
         [window setContentSize:NSSizeFromString(@"{1280,720}}")];
         
         NSToolbar* toolbar = [[NSToolbar alloc] initWithIdentifier:@"NSToolbarIdentifierTab"];
@@ -20,26 +23,24 @@ int main(int argc, const char * argv[]) {
         
         [window setToolbar:toolbar];
         
-        kRootDOM->set_content_text(@"Welcome!");
-        kRootDOM->set_heading(IZkDOM::kHeading1);
+        ZkImageDOM* layout_doodle = new ZkImageDOM();
         
-        ZkImageDOM* layout_3 = new ZkImageDOM();
+        layout_doodle->set_image_url([[NSURL alloc] initWithString:@"https://upload.wikimedia.org/wikipedia/commons/4/42/Animated-Flag-USA.gif"]);
         
-        layout_3->set_image_url([[NSURL alloc] initWithString:@"https://upload.wikimedia.org/wikipedia/commons/6/6b/Rotating_globe.gif"]);
-        layout_3->set_content_text(@"Could not load image");
-        layout_3->set_heading(IZkDOM::kHeading5);
+        layout_doodle->set_content_text(@"Couldn't load Doodle...");
+        layout_doodle->set_heading(IZkDOM::kHeading5);
         
-        ZkImageDOM* layout_4 = new ZkImageDOM();
+        layout_doodle->set_position(50, 10);
         
-        layout_4->set_image_url([[NSURL alloc] initWithString:@"https://images.squarespace-cdn.com/content/v1/601baa165d76be323d850cd5/1617212521474-E7PTKK8H7TGIH8ING0AE/netscape.gif"]);
-        layout_4->set_content_text(@"Could not load image");
-        layout_4->set_heading(IZkDOM::kHeading5);
+        ZkButtonDOM* layout_search_button = new ZkButtonDOM();
         
-        layout_4->set_position(50, 10);
+        layout_search_button->set_content_text(@"Search...");
+        layout_search_button->set_heading(IZkDOM::kHeadingParagraph);
         
-        layout_3->insert_child_element(layout_4);
-        kRootDOM->insert_child_element(layout_3);
+        layout_search_button->set_position(50, 10);
         
+        kRootDOM->insert_child_element(layout_search_button);
+        kRootDOM->insert_child_element(layout_doodle);
         kRootDOM->insert_element(window);
         
         NSEvent* event = nullptr;
@@ -48,7 +49,7 @@ int main(int argc, const char * argv[]) {
             do {
                 event = [window nextEventMatchingMask:NSEventMaskAny]; // window shows now.
                 if ([event type] == NSEventTypeLeftMouseDown) {
-                    NSLog(@"Mouse left down");
+                    NSLog(@"Mouse Left down");
                 } else if ([event type] == NSEventTypeRightMouseDown) {
                     NSLog(@"Mouse Right Down.");
                 } else {

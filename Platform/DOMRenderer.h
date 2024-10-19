@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 
+namespace ZKA {
 class IZkDOM {
 public:
     explicit IZkDOM() = default;
@@ -155,7 +156,7 @@ public:
         this->h_x += [[window contentView] frame].origin.x - 1;
         
         h_content = [[NSTextView alloc] initWithFrame:CGRectMake(this->h_x, this->h_y, this->h_font_sz * [this->h_markup_content length], this->h_font_sz)];
-
+        
         [h_content setTextColor:[NSColor blackColor]];
         [h_content setBackgroundColor:[NSColor clearColor]];
         [h_content setString:h_markup_content];
@@ -179,7 +180,6 @@ public:
         return true;
     }
 };
-
 
 class ZkImageDOM : public ZkTextDOM {
 protected:
@@ -229,8 +229,8 @@ public:
     }
     
     bool remove_element() override {
-        if (h_content) {
-            [h_content removeFromSuperview];
+        if (h_image_content) {
+            [h_image_view removeFromSuperview];
             
             for (auto& elem : h_child_element) {
                 elem->remove_element();
@@ -244,18 +244,18 @@ public:
     
     bool insert_element(NSWindow* window) override {
         if (!h_renderable || !window ||
-            h_content)
+            h_image_content)
             return false;
         
         h_image_content = [[NSImage alloc] initWithContentsOfURL:h_image_path];
         
         if (!h_image_content)
         {
-            this->h_y += [[window contentView] frame].origin.y - 5;
+            this->h_y += [[window contentView] frame].origin.y - 10;
             this->h_x += [[window contentView] frame].origin.x - 1;
             
-            h_placeholder_content = [[NSTextView alloc] initWithFrame:CGRectMake(-this->h_x, -this->h_y, this->h_font_sz * [this->h_markup_content length], this->h_font_sz)];
-
+            h_placeholder_content = [[NSTextView alloc] initWithFrame:CGRectMake(this->h_x, this->h_y, this->h_font_sz * [this->h_markup_content length], this->h_font_sz)];
+            
             [h_placeholder_content setTextColor:[NSColor blackColor]];
             [h_placeholder_content setBackgroundColor:[NSColor clearColor]];
             [h_placeholder_content setString:h_markup_content];
@@ -292,4 +292,99 @@ public:
     }
 };
 
+
+class ZkButtonDOM : public ZkTextDOM {
+protected:
+    NSButton *h_button_content{nullptr};
+    
+public:
+    explicit ZkButtonDOM() = default;
+    virtual ~ZkButtonDOM() = default;
+    
+    ZkButtonDOM& operator=(const ZkButtonDOM&) = default;
+    ZkButtonDOM(const ZkButtonDOM&) = default;
+    
+    bool insert_child_element(IZkDOM* dom_elem) override {
+        if (!dom_elem)
+            return false;
+        
+        this->h_child_element.push_back(dom_elem);
+        return true;
+    }
+    
+    bool is_text_node() override { return false; }
+    
+    bool remove_child_element(IZkDOM* dom_elem) override {
+        if (!dom_elem)
+            return false;
+        
+        auto elem = std::find(this->h_child_element.begin(), this->h_child_element.end(), dom_elem);
+        
+        if (elem != this->h_child_element.end())
+        {
+            this->h_child_element.erase(elem);
+            return true;
+        }
+        
+        return false;
+    }
+    
+    bool remove_element() override {
+        if (h_button_content) {
+            [h_button_content removeFromSuperview];
+            
+            for (auto& elem : h_child_element) {
+                elem->remove_element();
+            }
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    bool insert_element(NSWindow* window) override {
+        if (!h_renderable || !window ||
+            h_button_content)
+            return false;
+        
+        this->h_y += [[window contentView] frame].origin.y - 10;
+        this->h_x += [[window contentView] frame].origin.x - 1;
+            
+        h_button_content = [[NSButton alloc] initWithFrame:NSMakeRect(h_x, h_y, 200, 50)];
+        
+        [h_button_content setBezelStyle:NSBezelStyleRounded];
+        [h_button_content setTarget: [window contentView]];
+        [h_button_content setEnabled:YES];
+        [h_button_content setTransparent:NO];
+        
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        [style setAlignment:NSCenterTextAlignment];
+        
+        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSColor blackColor], NSForegroundColorAttributeName, style, NSParagraphStyleAttributeName, nil];
+        
+        NSAttributedString *attrString = [[NSAttributedString alloc]initWithString:h_markup_content attributes:attrsDictionary];
+        [h_button_content setAttributedTitle:attrString];
+        
+        if (h_font_sz <= 13.28)
+        {
+            [h_button_content setFont:[NSFont fontWithName: this->h_font_bold size: this->h_font_sz]];
+        }
+        else
+        {
+            [h_button_content setFont:[NSFont fontWithName: this->h_font size: this->h_font_sz]];
+        }
+        
+        [[window contentView] addSubview:h_button_content];
+    
+        for (auto& elem : h_child_element) {
+            elem->set_position(this->h_x, this->h_y);
+            elem->insert_element(window);
+        }
+        
+        return true;
+    }
+};
+
 inline ZkTextDOM* kRootDOM = new ZkTextDOM();
+} // namespace ZKA
