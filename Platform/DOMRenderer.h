@@ -5,8 +5,7 @@
 //  Created by Amlal on 10/19/24.
 //
 
-#ifndef MacHtmlRenderer_h
-#define MacHtmlRenderer_h
+#pragma once
 
 #import <Cocoa/Cocoa.h>
 #include <vector>
@@ -32,8 +31,14 @@ public:
     }
     
     void set_position(CGFloat x, CGFloat y) {
-        h_x = x;
-        h_y = y;
+        h_x += x;
+        h_y += y;
+        
+        if (x == 0)
+            h_x = 0;
+        
+        if (y == 0)
+            h_y = 0;
     }
     
 public:
@@ -79,7 +84,8 @@ public:
 protected:
     std::vector<IZkDOM*> h_child_element;
     bool h_renderable{true};
-    CGFloat h_x, h_y{0};
+    CGFloat h_x{0};
+    CGFloat h_y{0};
     
 protected:
     NSString* h_font{@"SF Compact Rounded"};
@@ -145,10 +151,10 @@ public:
             h_content)
             return false;
         
-        this->h_y += [[window contentView] frame].origin.y + 1;
-        this->h_x += [[window contentView] frame].origin.x + 1;
+        this->h_y += [[window contentView] frame].origin.y - 10;
+        this->h_x += [[window contentView] frame].origin.x - 1;
         
-        h_content = [[NSTextView alloc] initWithFrame:CGRectMake(-this->h_x, -this->h_y, [[window contentView] frame].size.width, [[window contentView] frame].size.height)];
+        h_content = [[NSTextView alloc] initWithFrame:CGRectMake(this->h_x, this->h_y, this->h_font_sz * [this->h_markup_content length], this->h_font_sz)];
 
         [h_content setTextColor:[NSColor blackColor]];
         [h_content setBackgroundColor:[NSColor clearColor]];
@@ -166,8 +172,7 @@ public:
         [[window contentView] addSubview:h_content];
         
         for (auto& elem : h_child_element) {
-            elem->set_position(this->h_x, this->h_y + this->h_font_sz);
-            
+            elem->set_position(this->h_x, this->h_y - 1 - this->h_font_sz);
             elem->insert_element(window);
         }
         
@@ -242,14 +247,14 @@ public:
             h_content)
             return false;
         
-        this->h_y += [[window contentView] frame].origin.y + 1;
-        this->h_x += [[window contentView] frame].origin.x + 1;
-        
         h_image_content = [[NSImage alloc] initWithContentsOfURL:h_image_path];
         
         if (!h_image_content)
         {
-            h_placeholder_content = [[NSTextView alloc] initWithFrame:CGRectMake(-this->h_x, -this->h_y, [[window contentView] frame].size.width, [[window contentView] frame].size.height)];
+            this->h_y += [[window contentView] frame].origin.y - 5;
+            this->h_x += [[window contentView] frame].origin.x - 1;
+            
+            h_placeholder_content = [[NSTextView alloc] initWithFrame:CGRectMake(-this->h_x, -this->h_y, this->h_font_sz * [this->h_markup_content length], this->h_font_sz)];
 
             [h_placeholder_content setTextColor:[NSColor blackColor]];
             [h_placeholder_content setBackgroundColor:[NSColor clearColor]];
@@ -268,7 +273,10 @@ public:
         }
         else
         {
-            h_image_view = [[NSImageView alloc] initWithFrame:CGRectMake(-this->h_x, -this->h_y, [h_image_content size].width, [h_image_content size].height)];
+            this->h_y += [[window contentView] frame].origin.y - [h_image_content size].height;
+            this->h_x += [[window contentView] frame].origin.x - 1;
+            
+            h_image_view = [[NSImageView alloc] initWithFrame:CGRectMake(this->h_x, this->h_y, [h_image_content size].width, [h_image_content size].height)];
             
             [h_image_view setImage:h_image_content];
             
@@ -276,7 +284,7 @@ public:
         }
         
         for (auto& elem : h_child_element) {
-            elem->set_position(this->h_x, this->h_y + [h_image_content size].height);
+            elem->set_position(this->h_x, this->h_y);
             elem->insert_element(window);
         }
         
@@ -284,4 +292,4 @@ public:
     }
 };
 
-#endif /* MacHtmlRenderer_h */
+inline ZkTextDOM* kRootDOM = new ZkTextDOM();
