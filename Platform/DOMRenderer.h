@@ -1,9 +1,11 @@
-//
-//  MacHtmlRenderer.h
-//  test
-//
-//  Created by Amlal on 10/19/24.
-//
+/*
+ * =====================================================================
+ *
+ *            Photon
+ *            Copyright ZKA Technologies, all rights reserved.
+ *
+ * =====================================================================
+ */
 
 #pragma once
 

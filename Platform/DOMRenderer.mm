@@ -1,3 +1,12 @@
+/*
+ * =====================================================================
+ *
+ *            Photon
+ *            Copyright ZKA Technologies, all rights reserved.
+ *
+ * =====================================================================
+ */
+
 #import "DOMRenderer.h"
 
 using namespace ZKA;
