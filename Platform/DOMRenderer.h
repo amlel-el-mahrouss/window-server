@@ -10,6 +10,7 @@
 #pragma once
 
 #import <Cocoa/Cocoa.h>
+#import <AVKit/AVKit.h>
 #include <vector>
 #include <string>
 
@@ -34,14 +35,8 @@ public:
     }
     
     void set_position(CGFloat x, CGFloat y) {
-        h_x += x;
-        h_y += y;
-        
-        if (x == 0)
-            h_x = 0;
-        
-        if (y == 0)
-            h_y = 0;
+        h_x = x;
+        h_y = y;
     }
     
 public:
@@ -154,9 +149,6 @@ public:
             h_content)
             return false;
         
-        this->h_y += [[window contentView] frame].origin.y - 10;
-        this->h_x += [[window contentView] frame].origin.x - 1;
-        
         h_content = [[NSTextView alloc] initWithFrame:CGRectMake(this->h_x, this->h_y, this->h_font_sz * [this->h_markup_content length], this->h_font_sz)];
         
         [h_content setTextColor:[NSColor blackColor]];
@@ -175,7 +167,6 @@ public:
         [[window contentView] addSubview:h_content];
         
         for (auto& elem : h_child_element) {
-            elem->set_position(this->h_x, this->h_y - 1 - this->h_font_sz);
             elem->insert_element(window);
         }
         
@@ -253,9 +244,6 @@ public:
         
         if (!h_image_content)
         {
-            this->h_y += [[window contentView] frame].origin.y - 10;
-            this->h_x += [[window contentView] frame].origin.x - 1;
-            
             h_placeholder_content = [[NSTextView alloc] initWithFrame:CGRectMake(this->h_x, this->h_y, this->h_font_sz * [this->h_markup_content length], this->h_font_sz)];
             
             [h_placeholder_content setTextColor:[NSColor blackColor]];
@@ -275,9 +263,6 @@ public:
         }
         else
         {
-            this->h_y += [[window contentView] frame].origin.y - [h_image_content size].height;
-            this->h_x += [[window contentView] frame].origin.x - 1;
-            
             h_image_view = [[NSImageView alloc] initWithFrame:CGRectMake(this->h_x, this->h_y, [h_image_content size].width, [h_image_content size].height)];
             
             [h_image_view setImage:h_image_content];
@@ -286,14 +271,12 @@ public:
         }
         
         for (auto& elem : h_child_element) {
-            elem->set_position(this->h_x, this->h_y);
             elem->insert_element(window);
         }
         
         return true;
     }
 };
-
 
 class ZkButtonDOM : public ZkTextDOM {
 protected:
@@ -350,10 +333,7 @@ public:
             h_button_content)
             return false;
         
-        this->h_y += [[window contentView] frame].origin.y - 10;
-        this->h_x += [[window contentView] frame].origin.x - 1;
-            
-        h_button_content = [[NSButton alloc] initWithFrame:NSMakeRect(h_x, h_y, 200, 50)];
+        h_button_content = [[NSButton alloc] initWithFrame:NSMakeRect(this->h_x, this->h_y, 200, 50)];
         
         [h_button_content setBezelStyle:NSBezelStyleRounded];
         [h_button_content setTarget: [window contentView]];
@@ -380,9 +360,85 @@ public:
         [[window contentView] addSubview:h_button_content];
     
         for (auto& elem : h_child_element) {
-            elem->set_position(this->h_x, this->h_y);
             elem->insert_element(window);
         }
+        
+        return true;
+    }
+};
+
+#define kDefaultVideoWidth 320
+#define kDefaultVideoHeight 240
+
+class ZkVideoDOM : public ZkTextDOM {
+protected:
+    AVPlayerItem *h_video_item{nullptr};
+    AVPlayer     *h_video_playback{nullptr};
+    NSURL        *h_video_url{nullptr};
+    
+public:
+    explicit ZkVideoDOM() = default;
+    virtual ~ZkVideoDOM() = default;
+    
+    ZkVideoDOM& operator=(const ZkVideoDOM&) = default;
+    ZkVideoDOM(const ZkVideoDOM&) = default;
+    
+    bool insert_child_element(IZkDOM* dom_elem) override {
+        if (!dom_elem)
+            return false;
+        
+        this->h_child_element.push_back(dom_elem);
+        return true;
+    }
+    
+    void set_video_url(NSURL* url) {
+        h_video_url = url;
+    }
+    
+    bool is_text_node() override { return false; }
+    
+    bool remove_child_element(IZkDOM* dom_elem) override {
+        if (!dom_elem)
+            return false;
+        
+        auto elem = std::find(this->h_child_element.begin(), this->h_child_element.end(), dom_elem);
+        
+        if (elem != this->h_child_element.end())
+        {
+            this->h_child_element.erase(elem);
+            return true;
+        }
+        
+        return false;
+    }
+    
+    bool remove_element() override {
+        for (auto& elem : h_child_element) {
+            elem->remove_element();
+        }
+        
+        return true;
+    }
+    
+    bool insert_element(NSWindow* window) override {
+        if (!h_renderable || !window ||
+            h_video_item)
+            return false;
+            
+        h_video_item = [[AVPlayerItem alloc] initWithURL:h_video_url];
+        h_video_playback = [[AVPlayer alloc] initWithPlayerItem:h_video_item];
+        
+        AVPlayerView* controller_video = [[AVPlayerView alloc] initWithFrame:NSMakeRect(this->h_x, this->h_y, kDefaultVideoWidth, kDefaultVideoHeight)];
+        controller_video.player = h_video_playback;
+        controller_video.player.volume = 0.2;
+        
+        [[window contentView] addSubview:controller_video];
+    
+        for (auto& elem : h_child_element) {
+            elem->insert_element(window);
+        }
+        
+        [h_video_playback play];
         
         return true;
     }

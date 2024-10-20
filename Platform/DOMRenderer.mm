@@ -19,16 +19,15 @@ int main(int argc, const char * argv[]) {
         [window setBackgroundColor:[NSColor whiteColor]];
         
         [window makeKeyAndOrderFront:nil];
+        [window setLevel:NSStatusWindowLevel];
         
-        [window setTitle:@"Photon Browser"];
-        [window setSubtitle:@"photon:welcome"];
+        [window setTitle:@"Photon DOM Renderer"];
+        [window setSubtitle:@"photon:perftest"];
         [window setContentSize:NSSizeFromString(@"{1280,720}}")];
         
         NSToolbar* toolbar = [[NSToolbar alloc] initWithIdentifier:@"NSToolbarIdentifierTab"];
         toolbar.allowsUserCustomization = YES;
         toolbar.displayMode = NSToolbarDisplayModeIconAndLabel;
-        
-        [[window contentView] setBoundsOrigin:NSMakePoint(0, -[window contentView].frame.size.height)];
         
         [window setToolbar:toolbar];
         
@@ -39,7 +38,7 @@ int main(int argc, const char * argv[]) {
         layout_doodle->set_content_text(@"Couldn't load Doodle...");
         layout_doodle->set_heading(IZkDOM::kHeading5);
         
-        layout_doodle->set_position(50, 10);
+        layout_doodle->set_position(150, 10);
         
         ZkButtonDOM* layout_search_button = new ZkButtonDOM();
         
@@ -48,8 +47,14 @@ int main(int argc, const char * argv[]) {
         
         layout_search_button->set_position(50, 10);
         
+        ZkVideoDOM* layout_video_blender = new ZkVideoDOM();
+        layout_video_blender->set_video_url([[NSURL alloc] initWithString:@"https://www.w3schools.com/html/mov_bbb.mp4"]);
+        
+        layout_video_blender->set_position(100, 100);
+        
         kRootDOM->insert_child_element(layout_search_button);
-        kRootDOM->insert_child_element(layout_doodle);
+        layout_search_button->insert_child_element(layout_doodle);
+        layout_doodle->insert_child_element(layout_video_blender);
         kRootDOM->insert_element(window);
         
         NSEvent* event = nullptr;
