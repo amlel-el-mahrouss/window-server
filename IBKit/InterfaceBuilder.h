@@ -1,8 +1,7 @@
 /*
  * =====================================================================
  *
- *            Photon
- *            Copyright ZKA Technologies, all rights reserved.
+ *            Copyright ZKA Web Services Co, all rights reserved.
  *
  * =====================================================================
  */
@@ -11,10 +10,24 @@
 
 #import <Cocoa/Cocoa.h>
 #import <AVKit/AVKit.h>
+
 #include <vector>
 #include <string>
 
+#define IB_KIT_VERSION_STR "1.0.0"
+#define IB_KIT_VERSION_BCD 0x0100
+
+#define IB_KIT_DEPRECATED
+
+#define IB_KIT_EXTENSION ".zib"
+
 namespace ZKA {
+class IZkDOM;
+class IZkTextDOM;
+class IZkVideoDOM;
+class IZkImageDOM;
+class ZkButtonDOM;
+
 class IZkDOM {
 public:
     explicit IZkDOM() = default;
@@ -92,6 +105,8 @@ protected:
     CGFloat h_font_sz{16.0f};
     
 };
+
+typedef void(*ZkPluginEntrypoint)(IZkDOM*);
 
 class ZkTextDOM : public IZkDOM {
 protected:
