@@ -4,4 +4,4 @@
 
 A software for making UIs on zkaOS.
 
-###### Copyright EL Mahrouss Logic. All rights reserved.
+###### Copyright Amlal EL Mahrouss. All rights reserved.
