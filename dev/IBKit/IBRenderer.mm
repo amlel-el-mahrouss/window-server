@@ -6,5 +6,4 @@
  * =====================================================================
  */
 
-#import <IBKit/InterfaceBuilder.h>
-#import <IBKit/DOMRenderer.h>
+#import <IBKit/IBRenderer.h>

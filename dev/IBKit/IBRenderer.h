@@ -9,6 +9,8 @@
 #pragma once
 
 #include <IBKit/InterfaceBuilder.h>
+#include <vector>
+#include <string>
 
 namespace ZKA {
 class IZkDOM;

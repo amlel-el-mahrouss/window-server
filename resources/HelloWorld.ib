@@ -1,0 +1,11 @@
+<IKWindow>
+    <IKCode MLID="ButtonID" MLEvent="Click" MLCompiler="C++">
+        [{
+            MLAlert alert;
+            alert.runModal("Hello", "%s", "Hello, World!");;
+        }]
+    </IKCode>
+    <IKButton MLID="ButtonID" X="10" Y="10" W="160", H="20">
+        Hello, World!
+    </IKButton>
+</IKWindow>
