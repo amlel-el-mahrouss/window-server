@@ -19,7 +19,7 @@
 
 #define IB_KIT_DEPRECATED __attribute__((deprecated))
 
-#define IB_KIT_EXTENSION ".interface"
+#define IB_KIT_EXTENSION ".ib"
 
 namespace ZKA {
 class IZkDOM;
