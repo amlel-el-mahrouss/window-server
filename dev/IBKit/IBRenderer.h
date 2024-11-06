@@ -450,6 +450,7 @@ public:
     }
 };
 
-inline ZkTextDOM* kRootDOM = new ZkTextDOM();
+/// @brief Root Object of DOM tree.
+inline IZkDOM* kRootDOM = nullptr;
 } // namespace ZKA
 
