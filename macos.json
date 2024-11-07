@@ -4,7 +4,7 @@
   "headers_path": [
     "./"
   ],
-  "sources_path": ["IBKit/*.mm"],
+  "sources_path": ["IBKit/*.c"],
   "output_name": "libIBKit.dylib",
   "compiler_flags": ["-fPIC", "-shared", "-framework AVKit", "-framework Cocoa", "-framework AVFoundation"],
   "cpp_macros": [
