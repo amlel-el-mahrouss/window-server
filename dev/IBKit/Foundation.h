@@ -13,3 +13,16 @@
 
 #define IB_KIT_DEPRECATED __attribute__((deprecated))
 
+extern "C" {
+#   include <X11/Xlib.h>
+#   include <X11/cursorfont.h>
+}
+
+#include <FoundationKit/FoundationKit.h>
+#include <FoundationKit/MLRect.h>
+#include <FoundationKit/MLPoint.h>
+#include <FoundationKit/MLString.h>
+
+class IBWindowDisplayController;
+class IBWindowDisplayDelegate;
+class IBWindowParser;
