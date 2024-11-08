@@ -25,4 +25,4 @@ extern "C" {
 
 class IBWindowDisplayController;
 class IBWindowDisplayDelegate;
-class IBWindowParser;
+class IBWindow;

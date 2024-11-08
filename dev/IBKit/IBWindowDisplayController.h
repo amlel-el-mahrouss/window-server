@@ -21,70 +21,11 @@ public:
     IBWindowDisplayController() = default;
     ~IBWindowDisplayController() = default;
 
-    BOOL createDisplay()
-    {
-        mDisplayPtr = XOpenDisplay(nullptr);
+public:
+    BOOL createDisplay() noexcept;
+    BOOL disposeDisplay() noexcept;
 
-        if (!mDisplayPtr)
-            return NO;
-
-        return YES;
-    }
-
-    BOOL disposeDisplay()
-    {
-        if (mDisplayPtr)
-        {
-            XCloseDisplay(mDisplayPtr);
-            return YES;
-        }
-
-        return NO;
-    }
-
-    BOOL runDisplay()
-    {
-        Window root;
-        root = DefaultRootWindow(mDisplayPtr);
-
-        XSelectInput(mDisplayPtr, root, SubstructureRedirectMask | SubstructureNotifyMask);
-
-        // > b. Synchronize the changes.
-        XSync(mDisplayPtr, False);
-
-        Cursor cursor = XCreateFontCursor(mDisplayPtr, XC_left_ptr);
-        // > b. Define the cursor for the root window.
-        XDefineCursor(mDisplayPtr, root, cursor);
-        // > c. Synchronize the changes.
-        XSync(mDisplayPtr, False);
-
-        XEvent e;
-
-        while (YES) 
-        {
-            XNextEvent(mDisplayPtr, &e);
-
-            switch (e.type) 
-            {
-            case ButtonPress:
-            {
-                // Unfreeze X to allow more mouse events for the root and all children.
-                XAllowEvents(mDisplayPtr, ReplayPointer, CurrentTime);
-                XSync(mDisplayPtr, False);
-                
-                MLLog("Button pressed!");
-                break;
-            }
-            default:
-            {
-                MLLog("Unhandled type of event.");
-                break;
-            }
-            }
-            // Ensures that X will proccess the event.
-            XSync(mDisplayPtr, False);
-        }
-    }
+    BOOL runDisplay() noexcept;
 
 private:
     Display* mDisplayPtr{nullptr};
