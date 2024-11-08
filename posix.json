@@ -4,8 +4,8 @@
   "headers_path": [
     "./dev", "../zt-dev/dev"
   ],
-  "sources_path": ["dev/IBKit/*.cc"],
-  "output_name": "libIBKit.dylib",
+  "sources_path": ["dev/WSKit/*.cc"],
+  "output_name": "libWSKit.dylib",
   "compiler_flags": ["-lFoundationKit", "-lGraphicsKit", "-shared", "-fPIC"],
   "cpp_macros": [
     "__IBKIT_DLL__=202401",

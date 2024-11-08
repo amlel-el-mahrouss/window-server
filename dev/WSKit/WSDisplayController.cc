@@ -6,9 +6,9 @@
  * =====================================================================
  */
 
-#include <IBKit/IBDisplayController.h>
+#include <WSKit/WSDisplayController.h>
 
-BOOL IBDisplayController::paintDisplays() noexcept
+BOOL WSDisplayController::paintDisplays() noexcept
 {
     while (YES) 
     {
@@ -19,7 +19,7 @@ BOOL IBDisplayController::paintDisplays() noexcept
     }
 }
 
-MLArray<IBDisplayDelegate, kMaxDisplaysPerController>& IBDisplayController::leakDisplays() noexcept
+MLArray<WSDisplayDelegate, kMaxDisplaysPerController>& WSDisplayController::leakDisplays() noexcept
 {
     return this->mDisplays;
 }

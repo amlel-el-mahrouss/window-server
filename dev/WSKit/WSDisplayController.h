@@ -8,24 +8,25 @@
 
 #pragma once
 
-#include <IBKit/Foundation.h>
+#include <WSKit/Foundation.h>
+#include <WSKit/WSDisplayDelegate.h>
 
 inline constexpr MLInteger64 kMaxDisplaysPerController = 16;
 
 /// @brief Main display controller class.
 /// @note Calls IBWindowDisplayDelegate when it gets an event.
-class IBDisplayController final ML_OBJECT
+class WSDisplayController final ML_OBJECT
 {
 public:
-	ML_COPY_DEFAULT(IBDisplayController);
+	ML_COPY_DEFAULT(WSDisplayController);
 
-	IBDisplayController()  = default;
-	~IBDisplayController() = default;
+	WSDisplayController()  = default;
+	~WSDisplayController() = default;
 
 public:
 	BOOL paintDisplays() noexcept;
-	MLArray<IBDisplayDelegate, kMaxDisplaysPerController>& leakDisplays() noexcept;
+	MLArray<WSDisplayDelegate, kMaxDisplaysPerController>& leakDisplays() noexcept;
 
 private:
-	MLArray<IBDisplayDelegate, kMaxDisplaysPerController> mDisplays;
+	MLArray<WSDisplayDelegate, kMaxDisplaysPerController> mDisplays;
 };
