@@ -10,24 +10,22 @@
 
 #include <IBKit/Foundation.h>
 
+inline constexpr MLInteger64 kMaxDisplaysPerController = 16;
 
 /// @brief Main display controller class.
 /// @note Calls IBWindowDisplayDelegate when it gets an event.
-class IBWindowDisplayController final ML_OBJECT
+class IBDisplayController final ML_OBJECT
 {
 public:
-    ML_COPY_DEFAULT(IBWindowDisplayController);
+	ML_COPY_DEFAULT(IBDisplayController);
 
-    IBWindowDisplayController() = default;
-    ~IBWindowDisplayController() = default;
+	IBDisplayController()  = default;
+	~IBDisplayController() = default;
 
 public:
-    BOOL createDisplay() noexcept;
-    BOOL disposeDisplay() noexcept;
-
-    BOOL runDisplay() noexcept;
+	BOOL paintDisplays() noexcept;
+	MLArray<IBDisplayDelegate, kMaxDisplaysPerController>& leakDisplays() noexcept;
 
 private:
-    Display* mDisplayPtr{nullptr};
-
+	MLArray<IBDisplayDelegate, kMaxDisplaysPerController> mDisplays;
 };
