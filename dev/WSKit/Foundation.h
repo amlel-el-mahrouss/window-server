@@ -18,3 +18,4 @@
 
 class WSDisplayController;
 class WSDisplayDelegate;
+struct WSConnectionEndpoint;
