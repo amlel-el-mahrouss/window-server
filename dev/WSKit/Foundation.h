@@ -19,3 +19,4 @@
 class WSDisplayController;
 class WSDisplayDelegate;
 struct WSConnectionEndpoint;
+class WSConnectionHashList;
