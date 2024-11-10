@@ -13,12 +13,15 @@
 class WSDisplayDelegate ML_OBJECT
 {
 public:
-	void (*onPaint)() = nullptr;
-	BOOL(*shouldPaint)
+	BOOL(*fOnPaint)(WSDisplayDelegate* self) = nullptr;
+	BOOL(*fShouldPaint)
 	() = nullptr;
+	struct WSWindow* fWindow{nullptr};
 
-	operator bool()
-	{
-		return onPaint && shouldPaint && shouldPaint();
-	}
+	operator bool();
+
+	WSDisplayDelegate() = default;
+	~WSDisplayDelegate() = default;
+
+	ML_COPY_DEFAULT(WSDisplayDelegate);
 };

@@ -4,7 +4,7 @@
   "headers_path": [
     "./dev", "../ml-dev/dev"
   ],
-  "sources_path": ["dev/WSKit/*.cc"],
+  "sources_path": ["dev/src/*.cc"],
   "output_name": "libWSKit.dylib",
   "compiler_flags": ["-lFoundationKit", "-lGraphicsKit", "-shared", "-fPIC"],
   "cpp_macros": [

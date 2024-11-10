@@ -14,7 +14,7 @@
 inline constexpr MLInteger64 kMaxDisplaysPerController = 16;
 
 /// @brief Main display controller class.
-/// @note Calls IBWindowDisplayDelegate when it gets an event.
+/// @note Calls WSDisplayDelegate paint event.
 class WSDisplayController final ML_OBJECT
 {
 public:
