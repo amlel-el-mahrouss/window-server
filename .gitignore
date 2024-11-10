@@ -8,6 +8,8 @@
 .AppleDouble
 .LSOverride
 
+html/
+
 *.dylib
 *.o
 
