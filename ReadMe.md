@@ -1,7 +1,9 @@
-<!-- README of Interface Builder Kit -->
+<!-- README of Window Server Kit -->
 
-# IBKit (Interface Builder Kit)
+# WSKit (Window Server Kit)
 
-A software for making UIs on zkaOS.
+## Install
+
+To-Do
 
 ###### Copyright (C) 2024, EL Mahrouss Logic, all rights reserved. All rights reserved.
